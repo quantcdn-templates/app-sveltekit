@@ -1,13 +1,14 @@
-# Build stage
+# Build stage - runs natively (not emulated) for faster builds
 ARG NODE_VERSION=22
-FROM node:${NODE_VERSION}-bookworm-slim AS builder
+ARG BUILDPLATFORM=linux/amd64
+FROM --platform=$BUILDPLATFORM node:${NODE_VERSION}-bookworm-slim AS builder
 
 WORKDIR /build
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install all dependencies
 RUN npm ci
 
 # Copy source files
@@ -15,6 +16,9 @@ COPY . .
 
 # Build the application
 RUN npm run build
+
+# Install production dependencies only (in builder stage to avoid QEMU issues)
+RUN rm -rf node_modules && npm ci --omit=dev
 
 # Production stage
 FROM ghcr.io/quantcdn-templates/app-node:${NODE_VERSION}
@@ -25,12 +29,10 @@ WORKDIR /app
 COPY quant/entrypoints/ /quant-entrypoint.d/
 RUN find /quant-entrypoint.d -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 
-# Copy built application
+# Copy built application and production dependencies from builder
 COPY --from=builder --chown=node:node /build/build ./build
 COPY --from=builder --chown=node:node /build/package*.json ./
-
-# Install production dependencies only
-RUN npm ci --omit=dev
+COPY --from=builder --chown=node:node /build/node_modules ./node_modules
 
 # CRITICAL: App port must be 3001 (proxy runs on 3000)
 ENV PORT=3001
