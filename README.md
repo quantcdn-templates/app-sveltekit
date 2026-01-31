@@ -2,7 +2,7 @@
 
 A production-ready SvelteKit template with server-side rendering for deployment on Quant Cloud.
 
-[![Deploy to Quant Cloud](https://www.quantcdn.io/img/quant-deploy-btn-sml.svg)](https://dashboard.quantcdn.io/cloud-apps/create/starter-kit/app-sveltekit)
+[![Deploy to Quant Cloud](https://www.quantcdn.io/img/quant-deploy-btn-sml.svg)](https://dashboard.quantcdn.io/deploy/app/app-sveltekit)
 
 ## Features
 

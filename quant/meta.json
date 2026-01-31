@@ -1,6 +1,6 @@
 [{
     "title": "SvelteKit (SSR)",
-    "url": "/deploy/step-one?template=app-sveltekit",
+    "url": "/deploy/app/app-sveltekit",
     "summary": "SvelteKit with server-side rendering using adapter-node.",
     "content": "Deploy full-featured SvelteKit applications with server-side rendering on Quant Cloud. Uses adapter-node for production deployment with API routes and dynamic rendering capabilities.",
     "image": "https://raw.githubusercontent.com/quantcdn-templates/app-sveltekit/main/quant/screenshot.png",
