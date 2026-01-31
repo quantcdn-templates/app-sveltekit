@@ -1,0 +1,40 @@
+# Dependencies (will be installed fresh in container)
+node_modules
+
+# Build output (will be built in container)
+build
+.svelte-kit
+
+# Git
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+LICENSE
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage
