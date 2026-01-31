@@ -73,7 +73,7 @@ jobs:
         id: version
         run: |
           # Extract SvelteKit version from package.json inside the container
-          VERSION=$(docker run --rm temp-version-check:latest node -p "
+          VERSION=$(docker run --rm temp-version-check:latest node -e "
             try {
               const pkg = require('./package.json');
               const deps = { ...pkg.dependencies, ...pkg.devDependencies };
@@ -82,13 +82,19 @@ jobs:
             } catch (e) {
               console.log('0.0.0');
             }
-          " 2>/dev/null | tail -1) || VERSION="0.0.0"
+          " 2>/dev/null) || VERSION="0.0.0"
 
-          # Clean up version string
-          VERSION=$(echo "$VERSION" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+          # Clean up version string (handle both x.y.z and x.y formats)
+          RAW_VERSION="$VERSION"
+          VERSION=$(echo "$RAW_VERSION" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+          if [ -z "$VERSION" ]; then
+            VERSION=$(echo "$RAW_VERSION" | grep -oE '[0-9]+\.[0-9]+' | head -1)
+            if [ -n "$VERSION" ]; then
+              VERSION="${VERSION}.0"
+            fi
+          fi
 
           if [ -z "$VERSION" ] || [ "$VERSION" = "0.0.0" ]; then
-            # Fallback: try to get from package-lock.json or just use a default
             echo "Could not detect version, using timestamp-based version"
             VERSION="1.0.$(date +%Y%m%d)"
           fi
