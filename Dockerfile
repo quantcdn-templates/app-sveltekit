@@ -1,6 +1,6 @@
-# Build stage - runs natively (not emulated) for faster builds
+# syntax=docker/dockerfile:1
+# Build stage - runs on native platform to avoid QEMU emulation issues
 ARG NODE_VERSION=22
-ARG BUILDPLATFORM=linux/amd64
 FROM --platform=$BUILDPLATFORM node:${NODE_VERSION}-bookworm-slim AS builder
 
 WORKDIR /build
