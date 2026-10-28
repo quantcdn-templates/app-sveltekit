@@ -4,6 +4,7 @@ x-quant-labels:
 
 services:
   app:
+    image: ghcr.io/quantcdn-templates/app-sveltekit:latest
     build:
       context: .
       args:
